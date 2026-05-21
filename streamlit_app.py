@@ -98,7 +98,7 @@ with col3:
     "Average Price ($)",
     value=float(row["Average Price"]),
     step=100.0,
-    format="%0.0f"
+    format="%0,0f"
 )
 
 
