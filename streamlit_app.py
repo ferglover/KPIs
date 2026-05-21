@@ -20,7 +20,7 @@ pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
 @st.cache_data
 def load_data():
 
-    df = pd.read_csv(BASE_DIR / "kpi_table.csv")
+    df = pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
 
     # Limpia corchetes del CSV
     df.columns = (
@@ -30,7 +30,7 @@ def load_data():
         .str.strip()
     )
 
-    return df
+   return pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
 
 df = load_data()
 
