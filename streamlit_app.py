@@ -12,14 +12,17 @@ st.set_page_config(
 )
 
 # =====================================
+# PATH
+# =====================================
+
+BASE_DIR = Path(__file__).resolve().parent
+
+# =====================================
 # LOAD DATA
 # =====================================
 
-pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
-
 @st.cache_data
 def load_data():
-
     df = pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
 
     # Limpia corchetes del CSV
@@ -30,7 +33,7 @@ def load_data():
         .str.strip()
     )
 
-   return pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
+    return df
 
 df = load_data()
 
@@ -64,7 +67,6 @@ row = filtered.iloc[0]
 col1, col2, col3 = st.columns(3)
 
 with col1:
-
     arrivals = st.number_input(
         "Arrivals",
         value=float(row["Arrivals"]),
@@ -72,7 +74,6 @@ with col1:
     )
 
 with col2:
-
     contracts = st.number_input(
         "Contracts Processable",
         value=float(row["Contracts Processable"]),
@@ -86,7 +87,6 @@ with col2:
     )
 
 with col3:
-
     avg_price = st.number_input(
         "Average Price",
         value=float(row["Average Price"]),
@@ -97,16 +97,9 @@ with col3:
 # DERIVED CALCULATIONS
 # =====================================
 
-# Contracts / Closing
 qs = contracts / (closing_rate / 100) if closing_rate else 0
-
-# Penetration
 penetration = (qs / arrivals * 100) if arrivals else 0
-
-# Volume
 volume = contracts * avg_price
-
-# VPG
 vpg = volume / qs if qs else 0
 
 # =====================================
@@ -118,25 +111,13 @@ st.subheader("Calculated KPIs")
 k1, k2, k3, k4 = st.columns(4)
 
 with k1:
-    st.metric(
-        "Penetration",
-        f"{penetration:.2f}%"
-    )
+    st.metric("Penetration", f"{penetration:.2f}%")
 
 with k2:
-    st.metric(
-        "Qs",
-        f"{qs:,.0f}"
-    )
+    st.metric("Qs", f"{qs:,.0f}")
 
 with k3:
-    st.metric(
-        "VPG",
-        f"${vpg:,.0f}"
-    )
+    st.metric("VPG", f"${vpg:,.0f}")
 
 with k4:
-    st.metric(
-        "Volume",
-        f"${volume:,.0f}"
-    )
+    st.metric("Volume", f"${volume:,.0f}")
