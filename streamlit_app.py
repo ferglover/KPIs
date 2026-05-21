@@ -101,8 +101,6 @@ with col3:
     format="%d"
 )
 
-st.caption(f"${avg_price:,.0f}")
-
 
 # =====================================
 # DERIVED CALCULATIONS
