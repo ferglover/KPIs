@@ -15,7 +15,7 @@ st.set_page_config(
 # LOAD DATA
 # =====================================
 
-BASE_DIR = Path(__file__).resolve().parent
+pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
 
 @st.cache_data
 def load_data():
