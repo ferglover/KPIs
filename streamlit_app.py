@@ -96,10 +96,12 @@ step=1
 with col3:
     avg_price = st.number_input(
     "Average Price ($)",
-    value=float(row["Average Price"]),
-    step=100.0,
-    format="%0.0f"
+    value=int(row["Average Price"]),
+    step=100,
+    format="%d"
 )
+
+st.caption(f"${avg_price:,.0f}")
 
 
 # =====================================
