@@ -98,7 +98,7 @@ with col3:
     "Average Price ($)",
     value=int(row["Average Price"]),
     step=100,
-    format=",0f"
+    format="%d"
 )
 
 # =====================================
