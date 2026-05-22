@@ -96,20 +96,21 @@ def load_forecast():
     )
 
     # Normaliza nombres
-    df["Metric"] = df["Metric"].replace({
-        "% Penetraci?n": "Penetration",
-        "% Penetración": "Penetration",
-        "% PenetraciÃ³n": "Penetration",
-        "Q's": "Qs",
-        "Q´s": "Qs",
-        "Q’s": "Qs",
-        "Contracts": "Contracts",
-        "Average Price": "Average Price",
-        "Closing Rate": "Closing Rate",
-        "VPG": "VPG",
-        "Volume": "Volume",
-        "Arrivals": "Arrivals"
-    })
+df["Metric"] = df["Metric"].replace({
+    "% Penetraci�n": "Penetration",
+    "% Penetraci?n": "Penetration",
+    "% Penetración": "Penetration",
+    "% PenetraciÃ³n": "Penetration",
+    "Q's": "Qs",
+    "Q´s": "Qs",
+    "Q’s": "Qs",
+    "Contracts": "Contracts",
+    "Average Price": "Average Price",
+    "Closing Rate": "Closing Rate",
+    "VPG": "VPG",
+    "Volume": "Volume",
+    "Arrivals": "Arrivals"
+})
 
     # Pivot
     df = df.pivot_table(
