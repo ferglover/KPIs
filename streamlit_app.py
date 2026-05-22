@@ -82,20 +82,22 @@ def load_forecast():
     df["Metric"] = df["Metric"].astype(str).str.strip()
     df["Value"] = pd.to_numeric(df["Value"], errors="coerce")
 
-    df["Metric"] = df["Metric"].replace({
-        "% Penetración": "Penetration",
-        "% Penetración": "Penetration",
-        "Q's": "Qs",
-        "Q´s": "Qs",
-        "Q’s": "Qs",
-        "Contracts ": "Contracts",
-        "Contracts": "Contracts",
-        "Average Price ": "Average Price",
-        "Closing Rate ": "Closing Rate",
-        "VPG ": "VPG",
-        "Volume ": "Volume",
-        "Arrivals ": "Arrivals"
-    })
+df["Metric"] = df["Metric"].astype(str).str.strip()
+
+df["Metric"] = df["Metric"].replace({
+    "% Penetraci?n": "Penetration",
+    "% Penetración": "Penetration",
+    "% PenetraciÃ³n": "Penetration",
+    "Q's": "Qs",
+    "Q´s": "Qs",
+    "Q’s": "Qs",
+    "Contracts": "Contracts",
+    "Average Price": "Average Price",
+    "Closing Rate": "Closing Rate",
+    "VPG": "VPG",
+    "Volume": "Volume",
+    "Arrivals": "Arrivals"
+})
 
     df = df.pivot_table(
         index="SalesRoom",
@@ -320,10 +322,13 @@ forecast_arrivals = float(forecast_row.get("Arrivals", 0))
 forecast_penetration = float(forecast_row.get("Penetration", 0))
 if forecast_penetration <= 1:
     forecast_penetration = forecast_penetration * 100
+
 forecast_qs = float(forecast_row.get("Qs", 0))
 forecast_contracts = float(forecast_row.get("Contracts", 0))
 forecast_avg_price = float(forecast_row.get("Average Price", 0))
 forecast_closing_rate = float(forecast_row.get("Closing Rate", 0))
+if forecast_closing_rate <= 1:
+    forecast_closing_rate = forecast_closing_rate * 100
 forecast_vpg = float(forecast_row.get("VPG", 0))
 forecast_volume = float(forecast_row.get("Volume", 0))
 
