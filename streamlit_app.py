@@ -51,7 +51,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv(BASE_DIR / data / "kpi_table.csv")
+    df = pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
 
     # Limpia corchetes del CSV
     df.columns = (
@@ -72,7 +72,7 @@ def load_data():
 @st.cache_data
 def load_forecast():
     df = pd.read_csv(
-        BASE_DIR / data / "FORECAST MAY.csv",
+        BASE_DIR / "data" / "FORECAST MAY.csv",
         header=None,
         names=["SalesRoom", "Metric", "Value"],
         encoding="latin1"
