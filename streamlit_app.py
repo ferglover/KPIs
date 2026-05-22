@@ -53,7 +53,6 @@ BASE_DIR = Path(__file__).resolve().parent
 def load_data():
     df = pd.read_csv(BASE_DIR / "data" / "kpi_table.csv")
 
-    # Limpia corchetes del CSV
     df.columns = (
         df.columns
         .str.replace("[", "", regex=False)
@@ -71,6 +70,7 @@ def load_data():
 
 @st.cache_data
 def load_forecast():
+
     df = pd.read_csv(
         BASE_DIR / "data" / "FORECAST MAY.csv",
         header=None,
@@ -78,27 +78,40 @@ def load_forecast():
         encoding="latin1"
     )
 
-    df["SalesRoom"] = df["SalesRoom"].astype(str).str.strip()
-    df["Metric"] = df["Metric"].astype(str).str.strip()
-    df["Value"] = pd.to_numeric(df["Value"], errors="coerce")
+    df["SalesRoom"] = (
+        df["SalesRoom"]
+        .astype(str)
+        .str.strip()
+    )
 
-df["Metric"] = df["Metric"].astype(str).str.strip()
+    df["Metric"] = (
+        df["Metric"]
+        .astype(str)
+        .str.strip()
+    )
 
-df["Metric"] = df["Metric"].replace({
-    "% Penetraci?n": "Penetration",
-    "% Penetración": "Penetration",
-    "% PenetraciÃ³n": "Penetration",
-    "Q's": "Qs",
-    "Q´s": "Qs",
-    "Q’s": "Qs",
-    "Contracts": "Contracts",
-    "Average Price": "Average Price",
-    "Closing Rate": "Closing Rate",
-    "VPG": "VPG",
-    "Volume": "Volume",
-    "Arrivals": "Arrivals"
-})
+    df["Value"] = pd.to_numeric(
+        df["Value"],
+        errors="coerce"
+    )
 
+    # Normaliza nombres
+    df["Metric"] = df["Metric"].replace({
+        "% Penetraci?n": "Penetration",
+        "% Penetración": "Penetration",
+        "% PenetraciÃ³n": "Penetration",
+        "Q's": "Qs",
+        "Q´s": "Qs",
+        "Q’s": "Qs",
+        "Contracts": "Contracts",
+        "Average Price": "Average Price",
+        "Closing Rate": "Closing Rate",
+        "VPG": "VPG",
+        "Volume": "Volume",
+        "Arrivals": "Arrivals"
+    })
+
+    # Pivot
     df = df.pivot_table(
         index="SalesRoom",
         columns="Metric",
@@ -107,6 +120,7 @@ df["Metric"] = df["Metric"].replace({
     ).reset_index()
 
     df.columns.name = None
+
     return df
 
 # =====================================
@@ -319,21 +333,40 @@ with p8:
 # =====================================
 
 forecast_arrivals = float(forecast_row.get("Arrivals", 0))
-forecast_penetration = float(forecast_row.get("Penetration", 0))
+
+forecast_penetration = float(
+    forecast_row.get("Penetration", 0)
+)
+
 if forecast_penetration <= 1:
-    forecast_penetration = forecast_penetration * 100
+    forecast_penetration *= 100
 
-forecast_qs = float(forecast_row.get("Qs", 0))
-forecast_contracts = float(forecast_row.get("Contracts", 0))
-forecast_avg_price = float(forecast_row.get("Average Price", 0))
-forecast_closing_rate = float(forecast_row.get("Closing Rate", 0))
-if forecast_closing_rate <= 1:
-    forecast_closing_rate = forecast_closing_rate * 100
-forecast_vpg = float(forecast_row.get("VPG", 0))
-forecast_volume = float(forecast_row.get("Volume", 0))
+forecast_qs = float(
+    forecast_row.get("Qs", 0)
+)
+
+forecast_contracts = float(
+    forecast_row.get("Contracts", 0)
+)
+
+forecast_avg_price = float(
+    forecast_row.get("Average Price", 0)
+)
+
+forecast_closing_rate = float(
+    forecast_row.get("Closing Rate", 0)
+)
 
 if forecast_closing_rate <= 1:
-    forecast_closing_rate = forecast_closing_rate * 100
+    forecast_closing_rate *= 100
+
+forecast_vpg = float(
+    forecast_row.get("VPG", 0)
+)
+
+forecast_volume = float(
+    forecast_row.get("Volume", 0)
+)
 
 st.subheader("Forecast Targets")
 
