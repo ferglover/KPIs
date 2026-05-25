@@ -5,6 +5,9 @@ import calendar
 import streamlit as st
 import pandas as pd
 
+if not st.user.is_logged_in:
+    st.login("microsoft")  # o "google"
+    st.stop()
 # =====================================
 # PAGE CONFIG
 # =====================================
