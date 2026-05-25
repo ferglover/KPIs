@@ -5,9 +5,6 @@ import calendar
 import streamlit as st
 import pandas as pd
 
-if not st.user.is_logged_in:
-    st.login("microsoft")  # o "google"
-    st.stop()
 # =====================================
 # PAGE CONFIG
 # =====================================
@@ -48,6 +45,9 @@ label[data-testid="stWidgetLabel"] p {
 
 BASE_DIR = Path(__file__).resolve().parent
 
+if not st.user.is_logged_in:
+    st.login("microsoft")  # o "google"
+    st.stop()
 # =====================================
 # LOAD ACTUAL DATA
 # =====================================
