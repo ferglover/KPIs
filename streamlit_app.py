@@ -40,15 +40,6 @@ label[data-testid="stWidgetLabel"] p {
 """, unsafe_allow_html=True)
 
 # =====================================
-# PATH
-# =====================================
-
-BASE_DIR = Path(__file__).resolve().parent
-
-if not st.user.is_logged_in:
-    st.login("microsoft")  # o "google"
-    st.stop()
-# =====================================
 # LOAD ACTUAL DATA
 # =====================================
 
