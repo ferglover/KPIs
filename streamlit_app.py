@@ -412,16 +412,8 @@ var_avg_price = proj_avg_price - forecast_avg_price
 # MATRIX
 # =====================================
 
-def matrix_fmt(kind, value, variance=False):
-    if kind == "int":
-        return f"{value:+,.0f}" if variance else f"{value:,.0f}"
-    if kind == "money":
-        return f"${value:+,.0f}" if variance else f"${value:,.0f}"
-    if kind == "pct":
-        return f"{value:+.2f} pp" if variance else f"{value:.2f}%"
-    return str(value)
-
 def render_matrix(rows):
+
     html_out = """
     <div class="matrix-scroll">
       <table class="matrix-table">
@@ -438,13 +430,48 @@ def render_matrix(rows):
     """
 
     for label, actual, projected, forecast, variance, kind in rows:
+
         html_out += f"""
         <tr>
-          <td><div class="matrix-kpi-cell">{html.escape(label)}</div></td>
-          <td><div class="matrix-value-card"><div class="matrix-value">{html.escape(matrix_fmt(kind, actual))}</div></div></td>
-          <td><div class="matrix-value-card"><div class="matrix-value">{html.escape(matrix_fmt(kind, projected))}</div></div></td>
-          <td><div class="matrix-value-card"><div class="matrix-value">{html.escape(matrix_fmt(kind, forecast))}</div></div></td>
-          <td><div class="matrix-value-card"><div class="matrix-value">{html.escape(matrix_fmt(kind, variance, variance=True))}</div></div></td>
+
+          <td>
+            <div class="matrix-kpi-cell">
+              {html.escape(label)}
+            </div>
+          </td>
+
+          <td>
+            <div class="matrix-value-card">
+              <div class="matrix-value">
+                {html.escape(matrix_fmt(kind, actual))}
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <div class="matrix-value-card">
+              <div class="matrix-value">
+                {html.escape(matrix_fmt(kind, projected))}
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <div class="matrix-value-card">
+              <div class="matrix-value">
+                {html.escape(matrix_fmt(kind, forecast))}
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <div class="matrix-value-card">
+              <div class="matrix-value">
+                {html.escape(matrix_fmt(kind, variance, variance=True))}
+              </div>
+            </div>
+          </td>
+
         </tr>
         """
 
@@ -454,7 +481,10 @@ def render_matrix(rows):
     </div>
     """
 
-    st.markdown(html_out, unsafe_allow_html=True)
+    st.markdown(
+        html_out,
+        unsafe_allow_html=True
+    )
 
 st.markdown("<div class='section-title'>KPI Matrix</div>", unsafe_allow_html=True)
 st.caption(
@@ -475,7 +505,7 @@ matrix_rows = [
 
 render_matrix(matrix_rows)
 
-    st.markdown(html_out, unsafe_allow_html=True)
+st.markdown(html_out, unsafe_allow_html=True)
 
 st.markdown("<div class='section-title'>KPI Matrix</div>", unsafe_allow_html=True)
 st.caption(
