@@ -1,3 +1,4 @@
+import html
 from pathlib import Path
 from datetime import datetime, timedelta
 import calendar
@@ -23,182 +24,111 @@ st.set_page_config(
 # STYLES
 # =====================================
 
-st.markdown("""
-<style>
-
-/* =========================
-   GLOBAL CONTAINER
-========================= */
-
-.block-container {
-    padding-top: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-bottom: 1rem;
-}
-
-/* =========================
-   INPUT EDITABLE
-========================= */
-
-div[data-baseweb="input"] input {
-    font-size: 36px !important;
-    font-weight: 400 !important;
-}
-
-/* =========================
-   BOTONES + / -
-========================= */
-
-button[data-testid="stNumberInputStepUp"],
-button[data-testid="stNumberInputStepDown"] {
-    height: 38px !important;
-    width: 38px !important;
-}
-
-/* =========================
-   LABEL DEL INPUT
-========================= */
-
-label[data-testid="stWidgetLabel"] p {
-    font-size: 18px !important;
-    font-weight: 700 !important;
-}
-
-/* =========================
-   MATRIX HEADERS
-========================= */
-
-.kpi-header {
-    font-size: 13px;
-    font-weight: 800;
-    padding: 8px 0 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-    margin-bottom: 8px;
-    text-align: center;
-}
-
-/* =========================
-   KPI LABEL
-========================= */
-
-.kpi-label {
-    font-size: 14px;
-    font-weight: 700;
-    padding-top: 12px;
-    line-height: 1.15;
-}
-
-/* =========================
-   KPI CARDS
-========================= */
-
-.kpi-value-card {
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 12px;
-    padding: 12px 12px 10px 12px;
-    min-height: 82px;
-    background: rgba(255,255,255,0.02);
-    display: flex;
-    align-items: center;
-}
-
-/* =========================
-   KPI VALUES
-========================= */
-
-.kpi-value {
-    font-size: 22px;
-    font-weight: 700;
-    line-height: 1.1;
-    word-break: break-word;
-}
-
-/* =========================
-   SECTION TITLES
-========================= */
-
-.section-title {
-    font-size: 20px;
-    font-weight: 800;
-    margin-top: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-
-/* =========================
-   MOBILE RESPONSIVE
-========================= */
-
-@media (max-width: 768px) {
-
-    /* STACK COLUMNS */
-    div[data-testid="stHorizontalBlock"] {
-        flex-direction: column !important;
-        gap: 0.5rem !important;
+st.markdown(
+    """
+    <style>
+    .block-container {
+        padding-top: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 1rem;
     }
 
-    div[data-testid="column"] {
-        width: 100% !important;
-        min-width: 0 !important;
-    }
-
-    /* HEADERS */
-    .kpi-header {
-        text-align: left !important;
-        font-size: 14px !important;
-        margin-bottom: 2px !important;
-        padding-bottom: 6px !important;
-    }
-
-    /* KPI LABELS */
-    .kpi-label {
-        padding-top: 2px !important;
-        margin-bottom: 2px !important;
-        font-size: 15px !important;
-    }
-
-    /* KPI CARDS */
-    .kpi-value-card {
-        min-height: 64px !important;
-        padding: 10px 10px 8px 10px !important;
-    }
-
-    /* KPI VALUES */
-    .kpi-value {
-        font-size: 18px !important;
-    }
-
-    /* INPUTS */
+    /* INPUT EDITABLE */
     div[data-baseweb="input"] input {
-        font-size: 22px !important;
+        font-size: 28px !important;
+        font-weight: 500 !important;
     }
 
-    /* BUTTONS */
+    /* BOTONES + / - */
     button[data-testid="stNumberInputStepUp"],
     button[data-testid="stNumberInputStepDown"] {
-        height: 30px !important;
-        width: 30px !important;
+        height: 32px !important;
+        width: 32px !important;
     }
 
-    /* LABELS */
+    /* LABEL DEL INPUT */
     label[data-testid="stWidgetLabel"] p {
         font-size: 14px !important;
+        font-weight: 700 !important;
     }
 
-    /* SECTION TITLES */
     .section-title {
-        font-size: 18px !important;
+        font-size: 20px;
+        font-weight: 800;
+        margin-top: 0.5rem;
+        margin-bottom: 0.25rem;
     }
-}
 
-</style>
-""", unsafe_allow_html=True)
+    .matrix-scroll {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 
-# =====================================
-# PATH
-# =====================================
+    .matrix-table {
+        width: 100%;
+        min-width: 980px;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
 
-BASE_DIR = Path(__file__).resolve().parent
+    .matrix-table thead th {
+        font-size: 13px;
+        font-weight: 800;
+        padding: 8px 10px 12px 10px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+        white-space: nowrap;
+    }
+
+    .matrix-kpi-cell {
+        font-size: 14px;
+        font-weight: 700;
+        padding-top: 12px;
+        line-height: 1.15;
+        min-width: 170px;
+    }
+
+    .matrix-value-card {
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 12px;
+        padding: 12px 12px 10px 12px;
+        min-height: 82px;
+        background: rgba(255,255,255,0.02);
+        display: flex;
+        align-items: center;
+    }
+
+    .matrix-value {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.1;
+        word-break: break-word;
+    }
+
+    @media (max-width: 768px) {
+        .matrix-table {
+            min-width: 860px;
+        }
+
+        .matrix-value {
+            font-size: 18px;
+        }
+
+        .matrix-kpi-cell {
+            font-size: 13px;
+            min-width: 150px;
+        }
+
+        .section-title {
+            font-size: 18px;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 # =====================================
 # LOAD ACTUAL DATA
@@ -487,20 +417,65 @@ var_avg_price = proj_avg_price - forecast_avg_price
 # MATRIX
 # =====================================
 
+def matrix_fmt(kind, value, variance=False):
+    if kind == "int":
+        return f"{value:+,.0f}" if variance else f"{value:,.0f}"
+    if kind == "money":
+        return f"${value:+,.0f}" if variance else f"${value:,.0f}"
+    if kind == "pct":
+        return f"{value:+.2f} pp" if variance else f"{value:.2f}%"
+    return str(value)
+
+def render_matrix(rows):
+    html_out = """
+    <div class="matrix-scroll">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th style="text-align:left;">KPI</th>
+            <th>Actuals KPIs</th>
+            <th>Projected KPIs to Month End</th>
+            <th>Forecast Targets</th>
+            <th>Projected vs Forecast</th>
+          </tr>
+        </thead>
+        <tbody>
+    """
+
+    for label, actual, projected, forecast, variance, kind in rows:
+        html_out += f"""
+        <tr>
+          <td><div class="matrix-kpi-cell">{html.escape(label)}</div></td>
+          <td><div class="matrix-value-card"><div class="matrix-value">{html.escape(matrix_fmt(kind, actual))}</div></div></td>
+          <td><div class="matrix-value-card"><div class="matrix-value">{html.escape(matrix_fmt(kind, projected))}</div></div></td>
+          <td><div class="matrix-value-card"><div class="matrix-value">{html.escape(matrix_fmt(kind, forecast))}</div></div></td>
+          <td><div class="matrix-value-card"><div class="matrix-value">{html.escape(matrix_fmt(kind, variance, variance=True))}</div></div></td>
+        </tr>
+        """
+
+    html_out += """
+        </tbody>
+      </table>
+    </div>
+    """
+
+    st.markdown(html_out, unsafe_allow_html=True)
+
 st.markdown("<div class='section-title'>KPI Matrix</div>", unsafe_allow_html=True)
 st.caption(
     f"Projection based on {legend_date.strftime('%B %d, %Y')} | "
     f"{days_elapsed} days elapsed | {days_remaining} days remaining"
 )
 
-col_widths = [1.25, 0.9, 0.9, 0.9, 0.9]
-render_header(col_widths)
+matrix_rows = [
+    ("Arrivals", arrivals, proj_arrivals, forecast_arrivals, var_arrivals, "int"),
+    ("Contracts Processable", contracts, proj_contracts, forecast_contracts, var_contracts, "int"),
+    ("Closing Rate", closing_rate, proj_closing_rate, forecast_closing_rate, var_closing_pp, "pct"),
+    ("Average Price", avg_price, proj_avg_price, forecast_avg_price, var_avg_price, "money"),
+    ("Qs", qs, proj_qs, forecast_qs, var_qs, "int"),
+    ("Penetration", penetration, proj_penetration, forecast_penetration, var_penetration_pp, "pct"),
+    ("VPG", vpg, proj_vpg, forecast_vpg, var_vpg, "money"),
+    ("Volume", volume, proj_volume, forecast_volume, var_volume, "money"),
+]
 
-render_row("Arrivals", arrivals, proj_arrivals, forecast_arrivals, var_arrivals, "int", col_widths)
-render_row("Contracts Processable", contracts, proj_contracts, forecast_contracts, var_contracts, "int", col_widths)
-render_row("Closing Rate", closing_rate, proj_closing_rate, forecast_closing_rate, var_closing_pp, "pct", col_widths)
-render_row("Average Price", avg_price, proj_avg_price, forecast_avg_price, var_avg_price, "money", col_widths)
-render_row("Qs", qs, proj_qs, forecast_qs, var_qs, "int", col_widths)
-render_row("Penetration", penetration, proj_penetration, forecast_penetration, var_penetration_pp, "pct", col_widths)
-render_row("VPG", vpg, proj_vpg, forecast_vpg, var_vpg, "money", col_widths)
-render_row("Volume", volume, proj_volume, forecast_volume, var_volume, "money", col_widths)
+render_matrix(matrix_rows)
