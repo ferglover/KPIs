@@ -65,7 +65,10 @@ label[data-testid="stWidgetLabel"] p {
 
 </style>
 """, unsafe_allow_html=True)
-
+#=====================================
+# PATH
+#=====================================
+BASE_DIR = Path(__file__).resolve().parent
 # =====================================
 # LOAD ACTUAL DATA
 # =====================================
