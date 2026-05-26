@@ -1,3 +1,31 @@
+# =====================================
+# SIMPLE LOGIN
+# =====================================
+
+USERNAME = "admin"
+PASSWORD = "uvc2026"
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+
+    st.title("Login")
+
+    user = st.text_input("User")
+    pwd = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+
+        if user == USERNAME and pwd == PASSWORD:
+            st.session_state.authenticated = True
+            st.rerun()
+
+        else:
+            st.error("Invalid credentials")
+
+    st.stop()
+
 from pathlib import Path
 from datetime import datetime, timedelta
 import calendar
