@@ -1,3 +1,9 @@
+from pathlib import Path
+from datetime import datetime, timedelta
+import calendar
+
+import streamlit as st
+import pandas as pd
 # =====================================
 # SIMPLE LOGIN
 # =====================================
@@ -25,13 +31,6 @@ if not st.session_state.authenticated:
             st.error("Invalid credentials")
 
     st.stop()
-
-from pathlib import Path
-from datetime import datetime, timedelta
-import calendar
-
-import streamlit as st
-import pandas as pd
 
 # =====================================
 # PAGE CONFIG
