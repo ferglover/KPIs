@@ -389,7 +389,7 @@ def render_matrix(rows):
             font-weight: 700;
             padding-top: 12px;
             line-height: 1.15;
-            min-width: 170px;
+            min-width: 90px;
             color: {COLORS["text"]};
         }}
 
