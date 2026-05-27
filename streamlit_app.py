@@ -314,7 +314,7 @@ def render_matrix(rows):
           margin: 0;
           padding: 0;
           background: transparent;
-          color: inherit;
+          color: #f5f7fa;
           font-family: sans-serif;
         }
 
@@ -336,9 +336,10 @@ def render_matrix(rows):
             font-weight: 800;
             padding: 8px 10px 12px 10px;
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.12);
+            border-bottom: 1px solid rgba(255,255,255,0.14);
             white-space: nowrap;
             background: #0e1117;
+            color: #f5f7fa;
         }
 
         .matrix-table thead th:first-child,
@@ -348,6 +349,7 @@ def render_matrix(rows):
             z-index: 3;
             background: #0e1117;
             text-align: left !important;
+            color: #f5f7fa;
         }
 
         .matrix-table thead th:first-child {
@@ -360,6 +362,7 @@ def render_matrix(rows):
             padding-top: 12px;
             line-height: 1.15;
             min-width: 170px;
+            color: #f5f7fa;
         }
 
         .matrix-value-card {
@@ -367,7 +370,7 @@ def render_matrix(rows):
             border-radius: 12px;
             padding: 12px 12px 10px 12px;
             min-height: 82px;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255,255,255,0.03);
             display: flex;
             align-items: center;
         }
@@ -377,6 +380,7 @@ def render_matrix(rows):
             font-weight: 700;
             line-height: 1.1;
             word-break: break-word;
+            color: #f5f7fa;
         }
 
         .matrix-value.positive {
@@ -388,7 +392,7 @@ def render_matrix(rows):
         }
 
         .matrix-value.neutral {
-            color: inherit;
+            color: #f5f7fa;
         }
       </style>
     </head>
@@ -434,7 +438,7 @@ def render_matrix(rows):
     </html>
     """
 
-    height = 130 + (len(rows) * 95)
+    height = 140 + (len(rows) * 96)
     st.components.v1.html(html_out, height=height, scrolling=True)
 
 # =====================================
