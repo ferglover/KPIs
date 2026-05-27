@@ -306,20 +306,106 @@ def value_card(value, tone="neutral"):
     """
 
 def render_matrix(rows):
-    html_out = textwrap.dedent("""
-        <div class="matrix-scroll">
-          <table class="matrix-table">
-            <thead>
-              <tr>
-                <th style="text-align:left;">KPI</th>
-                <th>Actuals KPIs</th>
-                <th>Projected KPIs to Month End</th>
-                <th>Forecast Targets</th>
-                <th>Projected vs Forecast</th>
-              </tr>
-            </thead>
-            <tbody>
-    """)
+    html_out = """
+    <html>
+    <head>
+      <style>
+        body {
+          margin: 0;
+          padding: 0;
+          background: transparent;
+          color: inherit;
+          font-family: sans-serif;
+        }
+
+        .matrix-scroll {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .matrix-table {
+            width: 100%;
+            min-width: 980px;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .matrix-table thead th {
+            font-size: 13px;
+            font-weight: 800;
+            padding: 8px 10px 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            white-space: nowrap;
+            background: #0e1117;
+        }
+
+        .matrix-table thead th:first-child,
+        .matrix-table tbody td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 3;
+            background: #0e1117;
+            text-align: left !important;
+        }
+
+        .matrix-table thead th:first-child {
+            z-index: 4;
+        }
+
+        .matrix-kpi-cell {
+            font-size: 14px;
+            font-weight: 700;
+            padding-top: 12px;
+            line-height: 1.15;
+            min-width: 170px;
+        }
+
+        .matrix-value-card {
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 12px 12px 10px 12px;
+            min-height: 82px;
+            background: rgba(255,255,255,0.02);
+            display: flex;
+            align-items: center;
+        }
+
+        .matrix-value {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.1;
+            word-break: break-word;
+        }
+
+        .matrix-value.positive {
+            color: #28a745;
+        }
+
+        .matrix-value.negative {
+            color: #dc3545;
+        }
+
+        .matrix-value.neutral {
+            color: inherit;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="matrix-scroll">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th style="text-align:left;">KPI</th>
+              <th>Actuals KPIs</th>
+              <th>Projected KPIs to Month End</th>
+              <th>Forecast Targets</th>
+              <th>Projected vs Forecast</th>
+            </tr>
+          </thead>
+          <tbody>
+    """
 
     for label, actual, projected, forecast, variance, kind in rows:
         tone = "neutral"
@@ -328,7 +414,7 @@ def render_matrix(rows):
         elif variance < 0:
             tone = "negative"
 
-        html_out += textwrap.dedent(f"""
+        html_out += f"""
             <tr>
               <td>
                 <div class="matrix-kpi-cell">{html.escape(label)}</div>
@@ -338,15 +424,18 @@ def render_matrix(rows):
               <td>{value_card(fmt_matrix(kind, forecast))}</td>
               <td>{value_card(fmt_matrix(kind, variance, variance=True), tone=tone)}</td>
             </tr>
-        """)
+        """
 
-    html_out += textwrap.dedent("""
-            </tbody>
-          </table>
-        </div>
-    """)
+    html_out += """
+          </tbody>
+        </table>
+      </div>
+    </body>
+    </html>
+    """
 
-    st.markdown(html_out, unsafe_allow_html=True)
+    height = 130 + (len(rows) * 95)
+    st.components.v1.html(html_out, height=height, scrolling=True)
 
 # =====================================
 # ACTUAL INPUTS
