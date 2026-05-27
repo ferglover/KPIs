@@ -174,7 +174,30 @@ st.markdown(
 .matrix-value.neutral {
     color: inherit;
 }
+.matrix-value.positive {
+    color: #28a745;
+}
 
+.matrix-value.negative {
+    color: #dc3545;
+}
+
+.matrix-value.neutral {
+    color: inherit;
+}
+
+.matrix-table thead th:first-child,
+.matrix-table tbody td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background: #0e1117;
+    text-align: left !important;
+}
+
+.matrix-table thead th:first-child {
+    z-index: 4;
+}
 # =====================================
 # PATH
 # =====================================
