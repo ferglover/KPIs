@@ -1,3 +1,4 @@
+import textwarp
 import html
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -305,20 +306,20 @@ def value_card(value, tone="neutral"):
     """
 
 def render_matrix(rows):
-    html_out = """
-    <div class="matrix-scroll">
-      <table class="matrix-table">
-        <thead>
-          <tr>
-            <th style="text-align:left;">KPI</th>
-            <th>Actuals KPIs</th>
-            <th>Projected KPIs to Month End</th>
-            <th>Forecast Targets</th>
-            <th>Projected vs Forecast</th>
-          </tr>
-        </thead>
-        <tbody>
-    """
+    html_out = textwrap.dedent("""
+        <div class="matrix-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;">KPI</th>
+                <th>Actuals KPIs</th>
+                <th>Projected KPIs to Month End</th>
+                <th>Forecast Targets</th>
+                <th>Projected vs Forecast</th>
+              </tr>
+            </thead>
+            <tbody>
+    """)
 
     for label, actual, projected, forecast, variance, kind in rows:
         tone = "neutral"
@@ -327,23 +328,23 @@ def render_matrix(rows):
         elif variance < 0:
             tone = "negative"
 
-        html_out += f"""
-        <tr>
-          <td>
-            <div class="matrix-kpi-cell">{html.escape(label)}</div>
-          </td>
-          <td>{value_card(fmt_matrix(kind, actual))}</td>
-          <td>{value_card(fmt_matrix(kind, projected))}</td>
-          <td>{value_card(fmt_matrix(kind, forecast))}</td>
-          <td>{value_card(fmt_matrix(kind, variance, variance=True), tone=tone)}</td>
-        </tr>
-        """
+        html_out += textwrap.dedent(f"""
+            <tr>
+              <td>
+                <div class="matrix-kpi-cell">{html.escape(label)}</div>
+              </td>
+              <td>{value_card(fmt_matrix(kind, actual))}</td>
+              <td>{value_card(fmt_matrix(kind, projected))}</td>
+              <td>{value_card(fmt_matrix(kind, forecast))}</td>
+              <td>{value_card(fmt_matrix(kind, variance, variance=True), tone=tone)}</td>
+            </tr>
+        """)
 
-    html_out += """
-        </tbody>
-      </table>
-    </div>
-    """
+    html_out += textwrap.dedent("""
+            </tbody>
+          </table>
+        </div>
+    """)
 
     st.markdown(html_out, unsafe_allow_html=True)
 
