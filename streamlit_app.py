@@ -16,6 +16,31 @@ st.set_page_config(
 )
 
 # =====================================
+# SIMPLE LOGIN
+# =====================================
+
+USERNAME = "admin"
+PASSWORD = "uvc2026"
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    st.title("Login")
+
+    user = st.text_input("User")
+    pwd = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+        if user == USERNAME and pwd == PASSWORD:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Invalid credentials")
+
+    st.stop()
+
+# =====================================
 # STYLES
 # =====================================
 
@@ -124,6 +149,37 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+.matrix-table thead th:first-child,
+.matrix-table tbody td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background: #0e1117;
+    text-align: left !important;
+}
+
+.matrix-table thead th:first-child {
+    z-index: 4;
+}
+
+.matrix-value.positive {
+    color: #28a745;
+}
+
+.matrix-value.negative {
+    color: #dc3545;
+}
+
+.matrix-value.neutral {
+    color: inherit;
+}
+
+# =====================================
+# PATH
+# =====================================
+
+BASE_DIR = Path(__file__).resolve().parent
 
 # =====================================
 # LOAD ACTUAL DATA
@@ -238,16 +294,6 @@ def input_card(title, value, step, fmt="%d"):
             label_visibility="collapsed"
         )
 
-def value_card(value):
-    st.markdown(
-        f"""
-        <div class="kpi-value-card">
-            <div class="kpi-value">{value}</div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
 def fmt_int(v):
     return f"{v:,.0f}"
 
@@ -260,46 +306,64 @@ def fmt_pct(v):
 def fmt_pp(v):
     return f"{v:+.2f} pp"
 
-def render_header(col_widths):
-    cols = st.columns(col_widths, gap="small")
-    cols[0].markdown("<div class='kpi-header'>KPI</div>", unsafe_allow_html=True)
-    cols[1].markdown("<div class='kpi-header'>Actuals KPIs</div>", unsafe_allow_html=True)
-    cols[2].markdown("<div class='kpi-header'>Projected KPIs to Month End</div>", unsafe_allow_html=True)
-    cols[3].markdown("<div class='kpi-header'>Forecast Targets</div>", unsafe_allow_html=True)
-    cols[4].markdown("<div class='kpi-header'>Projected vs Forecast</div>", unsafe_allow_html=True)
+def fmt_matrix(kind, value, variance=False):
+    if kind == "int":
+        return f"{value:+,.0f}" if variance else f"{value:,.0f}"
+    if kind == "money":
+        return f"${value:+,.0f}" if variance else f"${value:,.0f}"
+    if kind == "pct":
+        return f"{value:+.2f} pp" if variance else f"{value:.2f}%"
+    return str(value)
 
-def render_row(label, actual, projected, forecast, variance, kind, col_widths):
-    cols = st.columns(col_widths, gap="small")
+def value_card(value, tone="neutral"):
+    return f"""
+    <div class="matrix-value-card">
+        <div class="matrix-value {tone}">{html.escape(value)}</div>
+    </div>
+    """
 
-    cols[0].markdown(f"<div class='kpi-label'>{label}</div>", unsafe_allow_html=True)
+def render_matrix(rows):
+    html_out = """
+    <div class="matrix-scroll">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th style="text-align:left;">KPI</th>
+            <th>Actuals KPIs</th>
+            <th>Projected KPIs to Month End</th>
+            <th>Forecast Targets</th>
+            <th>Projected vs Forecast</th>
+          </tr>
+        </thead>
+        <tbody>
+    """
 
-    with cols[1]:
-        value_card(
-            fmt_int(actual) if kind == "int"
-            else fmt_money(actual) if kind == "money"
-            else fmt_pct(actual)
-        )
+    for label, actual, projected, forecast, variance, kind in rows:
+        tone = "neutral"
+        if variance > 0:
+            tone = "positive"
+        elif variance < 0:
+            tone = "negative"
 
-    with cols[2]:
-        value_card(
-            fmt_int(projected) if kind == "int"
-            else fmt_money(projected) if kind == "money"
-            else fmt_pct(projected)
-        )
+        html_out += f"""
+        <tr>
+          <td>
+            <div class="matrix-kpi-cell">{html.escape(label)}</div>
+          </td>
+          <td>{value_card(fmt_matrix(kind, actual))}</td>
+          <td>{value_card(fmt_matrix(kind, projected))}</td>
+          <td>{value_card(fmt_matrix(kind, forecast))}</td>
+          <td>{value_card(fmt_matrix(kind, variance, variance=True), tone=tone)}</td>
+        </tr>
+        """
 
-    with cols[3]:
-        value_card(
-            fmt_int(forecast) if kind == "int"
-            else fmt_money(forecast) if kind == "money"
-            else fmt_pct(forecast)
-        )
+    html_out += """
+        </tbody>
+      </table>
+    </div>
+    """
 
-    with cols[4]:
-        value_card(
-            fmt_int(variance) if kind == "int"
-            else fmt_money(variance) if kind == "money"
-            else fmt_pp(variance)
-        )
+    st.markdown(html_out, unsafe_allow_html=True)
 
 # =====================================
 # ACTUAL INPUTS
@@ -411,80 +475,7 @@ var_avg_price = proj_avg_price - forecast_avg_price
 # =====================================
 # MATRIX
 # =====================================
-def matrix_fmt(kind, value, variance=False):
-    if kind == "int":
-        return f"{value:+,.0f}" if variance else f"{value:,.0f}"
-    if kind == "money":
-        return f"${value:+,.0f}" if variance else f"${value:,.0f}"
-    if kind == "pct":
-        return f"{value:+.2f} pp" if variance else f"{value:.2f}%"
-    return str(value)
-    
-def render_matrix(rows):
 
-    html_out = """
-    <div class="matrix-scroll">
-      <table class="matrix-table">
-        <thead>
-          <tr>
-            <th style="text-align:left;">KPI</th>
-            <th>Actuals KPIs</th>
-            <th>Projected KPIs to Month End</th>
-            <th>Forecast Targets</th>
-            <th>Projected vs Forecast</th>
-          </tr>
-        </thead>
-        <tbody>
-    """
-
-    for label, actual, projected, forecast, variance, kind in rows:
-        html_out += f"""
-        <tr>
-          <td>
-            <div class="matrix-kpi-cell">
-              {html.escape(label)}
-            </div>
-          </td>
-          <td>
-            <div class="matrix-value-card">
-              <div class="matrix-value">
-                {html.escape(matrix_fmt(kind, actual))}
-              </div>
-            </div>
-          </td>
-          <td>
-            <div class="matrix-value-card">
-              <div class="matrix-value">
-                {html.escape(matrix_fmt(kind, projected))}
-              </div>
-            </div>
-          </td>
-          <td>
-            <div class="matrix-value-card">
-              <div class="matrix-value">
-                {html.escape(matrix_fmt(kind, forecast))}
-              </div>
-            </div>
-          </td>
-          <td>
-            <div class="matrix-value-card">
-              <div class="matrix-value">
-                {html.escape(matrix_fmt(kind, variance, variance=True))}
-              </div>
-            </div>
-          </td>
-        </tr>
-        """
-
-    html_out += """
-        </tbody>
-      </table>
-    </div>
-    """
-
-    st.markdown(html_out, unsafe_allow_html=True)
-
-st.markdown("<div class='section-title'>KPI Matrix</div>", unsafe_allow_html=True)
 st.markdown("<div class='section-title'>KPI Matrix</div>", unsafe_allow_html=True)
 st.caption(
     f"Projection based on {legend_date.strftime('%B %d, %Y')} | "
@@ -501,3 +492,5 @@ matrix_rows = [
     ("VPG", vpg, proj_vpg, forecast_vpg, var_vpg, "money"),
     ("Volume", volume, proj_volume, forecast_volume, var_volume, "money"),
 ]
+
+render_matrix(matrix_rows)
