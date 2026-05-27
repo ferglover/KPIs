@@ -135,7 +135,7 @@ st.markdown(
         font-weight: 700;
         padding-top: 12px;
         line-height: 1.15;
-        min-width: 50px;
+        min-width: 30px;
         color: {COLORS["text"]};
     }}
 
@@ -143,14 +143,14 @@ st.markdown(
         border: 1px solid {COLORS["border"]};
         border-radius: 12px;
         padding: 12px 12px 10px 12px;
-        min-height: 82px;
+        min-height: 1.15px;
         background: {COLORS["card_bg"]};
         display: flex;
         align-items: center;
     }}
 
     .matrix-value {{
-        font-size: 22px;
+        font-size: 14px;
         font-weight: 700;
         line-height: 1.1;
         word-break: break-word;
