@@ -504,8 +504,8 @@ with i1:
 
 with i2:
     contracts = input_card(
-        "Contracts Processable",
-        int(round(float(row["Contracts Processable"]))),
+        "Contracts",
+        int(round(float(row["Contracts"]))),
         step=1,
         fmt="%d"
     )
@@ -605,7 +605,7 @@ st.caption(
 
 matrix_rows = [
     ("Arrivals", arrivals, proj_arrivals, forecast_arrivals, var_arrivals, "int"),
-    ("Contracts Processable", contracts, proj_contracts, forecast_contracts, var_contracts, "int"),
+    ("Contracts", contracts, proj_contracts, forecast_contracts, var_contracts, "int"),
     ("Closing Rate", closing_rate, proj_closing_rate, forecast_closing_rate, var_closing_pp, "pct"),
     ("Average Price", avg_price, proj_avg_price, forecast_avg_price, var_avg_price, "money"),
     ("Qs", qs, proj_qs, forecast_qs, var_qs, "int"),
