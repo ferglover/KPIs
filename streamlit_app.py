@@ -20,6 +20,7 @@ st.set_page_config(
 # =====================================
 
 
+
 # =====================================
 # STYLES
 # =====================================
@@ -80,6 +81,20 @@ st.markdown(
         text-align: center;
         border-bottom: 1px solid rgba(255,255,255,0.12);
         white-space: nowrap;
+        background: #0e1117;
+    }
+
+    .matrix-table thead th:first-child,
+    .matrix-table tbody td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 3;
+        background: #0e1117;
+        text-align: left !important;
+    }
+
+    .matrix-table thead th:first-child {
+        z-index: 4;
     }
 
     .matrix-kpi-cell {
@@ -107,6 +122,18 @@ st.markdown(
         word-break: break-word;
     }
 
+    .matrix-value.positive {
+        color: #28a745;
+    }
+
+    .matrix-value.negative {
+        color: #dc3545;
+    }
+
+    .matrix-value.neutral {
+        color: inherit;
+    }
+
     @media (max-width: 768px) {
         .matrix-table {
             min-width: 860px;
@@ -123,7 +150,8 @@ st.markdown(
 
         .section-title {
             font-size: 18px;
-            }
+        }
+    }
     </style>
     """,
     unsafe_allow_html=True,
