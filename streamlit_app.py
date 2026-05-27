@@ -599,8 +599,7 @@ var_avg_price = proj_avg_price - forecast_avg_price
 
 st.markdown("<div class='section-title'>KPI Matrix</div>", unsafe_allow_html=True)
 st.caption(
-    f"Projection based on {legend_date.strftime('%B %d, %Y')} | "
-    f"{days_elapsed} days elapsed | {days_remaining} days remaining"
+    f"Projection based on {legend_date.strftime('%B %d, %Y')} | {days_remaining} days remaining"
 )
 
 matrix_rows = [
