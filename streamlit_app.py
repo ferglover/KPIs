@@ -26,19 +26,19 @@ st.set_page_config(
 # =====================================
 
 def theme_colors():
-    theme_base = st.get_option("theme.base")
+    theme_base = (st.get_option("theme.base") or "dark").lower()
 
     if theme_base == "light":
         return {
-            "bg": "#ffffff",
-            "card_bg": "#f7f7f9",
-            "text": "#111111",
-            "muted": "#5f6368",
-            "border": "rgba(0,0,0,0.08)",
+            "bg": "#f5f7fb",
+            "card_bg": "#e8edf5",
+            "text": "#111827",
+            "muted": "#6b7280",
+            "border": "rgba(17,24,39,0.14)",
             "header_bg": "#ffffff",
             "sticky_bg": "#ffffff",
-            "positive": "#1f8f3a",
-            "negative": "#c62828",
+            "positive": "#15803d",
+            "negative": "#b91c1c",
         }
 
     return {
@@ -331,18 +331,22 @@ def value_card(value, tone="neutral"):
     """
 
 def render_matrix(rows):
-
     html_out = f"""
     <html>
     <head>
       <style>
-
         body {{
           margin: 0;
           padding: 0;
-          background: transparent;
+          background: {COLORS["bg"]};
           color: {COLORS["text"]};
           font-family: sans-serif;
+        }}
+
+        .matrix-shell {{
+            background: {COLORS["bg"]};
+            border-radius: 14px;
+            padding: 8px 0 0 0;
         }}
 
         .matrix-scroll {{
@@ -423,7 +427,6 @@ def render_matrix(rows):
         }}
 
         @media (max-width: 768px) {{
-
             .matrix-table {{
                 min-width: 860px;
             }}
@@ -436,84 +439,55 @@ def render_matrix(rows):
                 font-size: 13px;
                 min-width: 150px;
             }}
-
         }}
-
       </style>
     </head>
-
     <body>
-
-      <div class="matrix-scroll">
-
-        <table class="matrix-table">
-
-          <thead>
-            <tr>
-              <th style="text-align:left;">KPI</th>
-              <th>Actuals KPIs</th>
-              <th>Projected KPIs to Month End</th>
-              <th>Forecast Targets</th>
-              <th>Projected vs Forecast</th>
-            </tr>
-          </thead>
-
-          <tbody>
+      <div class="matrix-shell">
+        <div class="matrix-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;">KPI</th>
+                <th>Actuals KPIs</th>
+                <th>Projected KPIs to Month End</th>
+                <th>Forecast Targets</th>
+                <th>Projected vs Forecast</th>
+              </tr>
+            </thead>
+            <tbody>
     """
 
     for label, actual, projected, forecast, variance, kind in rows:
-
         tone = "neutral"
-
         if variance > 0:
             tone = "positive"
-
         elif variance < 0:
             tone = "negative"
 
         html_out += f"""
-            <tr>
-
-              <td>
-                <div class="matrix-kpi-cell">
-                    {html.escape(label)}
-                </div>
-              </td>
-
-              <td>
-                {value_card(fmt_matrix(kind, actual), tone="neutral")}
-              </td>
-
-              <td>
-                {value_card(fmt_matrix(kind, projected), tone="neutral")}
-              </td>
-
-              <td>
-                {value_card(fmt_matrix(kind, forecast), tone="neutral")}
-              </td>
-
-              <td>
-                {value_card(fmt_matrix(kind, variance, variance=True), tone=tone)}
-              </td>
-
-            </tr>
+              <tr>
+                <td>
+                  <div class="matrix-kpi-cell">{html.escape(label)}</div>
+                </td>
+                <td>{value_card(fmt_matrix(kind, actual), tone="neutral")}</td>
+                <td>{value_card(fmt_matrix(kind, projected), tone="neutral")}</td>
+                <td>{value_card(fmt_matrix(kind, forecast), tone="neutral")}</td>
+                <td>{value_card(fmt_matrix(kind, variance, variance=True), tone=tone)}</td>
+              </tr>
         """
 
     html_out += """
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </body>
     </html>
     """
 
     height = 140 + (len(rows) * 96)
-
-    st.components.v1.html(
-        html_out,
-        height=height,
-        scrolling=True
-    )
+    st.components.v1.html(html_out, height=height, scrolling=True)
 
 # =====================================
 # ACTUAL INPUTS
