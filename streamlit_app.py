@@ -266,134 +266,146 @@ forecast_row = forecast_filtered.iloc[0]
 # HELPERS
 # =====================================
 
-def input_card(title, value, step, fmt="%d"):
-    with st.container(border=True):
-        st.markdown(f"**{title}**")
-        return st.number_input(
-            title,
-            value=value,
-            step=step,
-            format=fmt,
-            label_visibility="collapsed"
-        )
+def theme_colors():
+    theme_base = st.get_option("theme.base") or "dark"
 
-def fmt_int(v):
-    return f"{v:,.0f}"
+    if theme_base == "light":
+        return {
+            "bg": "#ffffff",
+            "card_bg": "#f6f7fb",
+            "text": "#111111",
+            "muted": "#5f6368",
+            "border": "rgba(0,0,0,0.10)",
+            "header_bg": "#ffffff",
+            "positive": "#1f8f3a",
+            "negative": "#c62828",
+        }
 
-def fmt_money(v):
-    return f"${v:,.0f}"
+    return {
+        "bg": "#0e1117",
+        "card_bg": "rgba(255,255,255,0.03)",
+        "text": "#f5f7fa",
+        "muted": "rgba(245,247,250,0.70)",
+        "border": "rgba(255,255,255,0.12)",
+        "header_bg": "#0e1117",
+        "positive": "#28a745",
+        "negative": "#dc3545",
+    }
 
-def fmt_pct(v):
-    return f"{v:.2f}%"
 
-def fmt_pp(v):
-    return f"{v:+.2f} pp"
+def value_card(value, tone="neutral", colors=None):
+    colors = colors or theme_colors()
+    tone_color = colors["text"]
+    if tone == "positive":
+        tone_color = colors["positive"]
+    elif tone == "negative":
+        tone_color = colors["negative"]
 
-def fmt_matrix(kind, value, variance=False):
-    if kind == "int":
-        return f"{value:+,.0f}" if variance else f"{value:,.0f}"
-    if kind == "money":
-        return f"${value:+,.0f}" if variance else f"${value:,.0f}"
-    if kind == "pct":
-        return f"{value:+.2f} pp" if variance else f"{value:.2f}%"
-    return str(value)
-
-def value_card(value, tone="neutral"):
     return f"""
-    <div class="matrix-value-card">
-        <div class="matrix-value {tone}">{html.escape(value)}</div>
+    <div class="matrix-value-card" style="background:{colors['card_bg']}; border-color:{colors['border']};">
+        <div class="matrix-value" style="color:{tone_color};">{html.escape(value)}</div>
     </div>
     """
 
+
 def render_matrix(rows):
-    html_out = """
+    colors = theme_colors()
+
+    html_out = f"""
     <html>
     <head>
       <style>
-        body {
+        body {{
           margin: 0;
           padding: 0;
           background: transparent;
-          color: #f5f7fa;
+          color: {colors["text"]};
           font-family: sans-serif;
-        }
+        }}
 
-        .matrix-scroll {
+        .matrix-scroll {{
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-        }
+        }}
 
-        .matrix-table {
+        .matrix-table {{
             width: 100%;
             min-width: 980px;
             border-collapse: separate;
             border-spacing: 0 10px;
-        }
+        }}
 
-        .matrix-table thead th {
+        .matrix-table thead th {{
             font-size: 13px;
             font-weight: 800;
             padding: 8px 10px 12px 10px;
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.14);
+            border-bottom: 1px solid {colors["border"]};
             white-space: nowrap;
-            background: #0e1117;
-            color: #f5f7fa;
-        }
+            background: {colors["header_bg"]};
+            color: {colors["text"]};
+        }}
 
         .matrix-table thead th:first-child,
-        .matrix-table tbody td:first-child {
+        .matrix-table tbody td:first-child {{
             position: sticky;
             left: 0;
             z-index: 3;
-            background: #0e1117;
+            background: {colors["header_bg"]};
             text-align: left !important;
-            color: #f5f7fa;
-        }
+            color: {colors["text"]};
+        }}
 
-        .matrix-table thead th:first-child {
+        .matrix-table thead th:first-child {{
             z-index: 4;
-        }
+        }}
 
-        .matrix-kpi-cell {
+        .matrix-kpi-cell {{
             font-size: 14px;
             font-weight: 700;
             padding-top: 12px;
             line-height: 1.15;
             min-width: 170px;
-            color: #f5f7fa;
-        }
+            color: {colors["text"]};
+        }}
 
-        .matrix-value-card {
-            border: 1px solid rgba(255,255,255,0.12);
+        .matrix-value-card {{
+            border: 1px solid {colors["border"]};
             border-radius: 12px;
             padding: 12px 12px 10px 12px;
             min-height: 82px;
-            background: rgba(255,255,255,0.03);
+            background: {colors["card_bg"]};
             display: flex;
             align-items: center;
-        }
+        }}
 
-        .matrix-value {
+        .matrix-value {{
             font-size: 22px;
             font-weight: 700;
             line-height: 1.1;
             word-break: break-word;
-            color: #f5f7fa;
-        }
+            color: {colors["text"]};
+        }}
 
-        .matrix-value.positive {
-            color: #28a745;
-        }
+        @media (max-width: 768px) {{
+            .matrix-table {{
+                min-width: 860px;
+            }}
 
-        .matrix-value.negative {
-            color: #dc3545;
-        }
+            .matrix-value {{
+                font-size: 18px;
+            }}
 
-        .matrix-value.neutral {
-            color: #f5f7fa;
-        }
+            .matrix-kpi-cell {{
+                font-size: 13px;
+                min-width: 150px;
+            }}
+
+            .section-title {{
+                font-size: 18px;
+            }}
+        }}
       </style>
     </head>
     <body>
@@ -423,10 +435,10 @@ def render_matrix(rows):
               <td>
                 <div class="matrix-kpi-cell">{html.escape(label)}</div>
               </td>
-              <td>{value_card(fmt_matrix(kind, actual))}</td>
-              <td>{value_card(fmt_matrix(kind, projected))}</td>
-              <td>{value_card(fmt_matrix(kind, forecast))}</td>
-              <td>{value_card(fmt_matrix(kind, variance, variance=True), tone=tone)}</td>
+              <td>{value_card(fmt_matrix(kind, actual), colors=colors)}</td>
+              <td>{value_card(fmt_matrix(kind, projected), colors=colors)}</td>
+              <td>{value_card(fmt_matrix(kind, forecast), colors=colors)}</td>
+              <td>{value_card(fmt_matrix(kind, variance, variance=True), tone=tone, colors=colors)}</td>
             </tr>
         """
 
@@ -440,46 +452,6 @@ def render_matrix(rows):
 
     height = 140 + (len(rows) * 96)
     st.components.v1.html(html_out, height=height, scrolling=True)
-
-# =====================================
-# ACTUAL INPUTS
-# =====================================
-
-st.markdown("<div class='section-title'>Actuals KPIs</div>", unsafe_allow_html=True)
-
-i1, i2, i3, i4 = st.columns(4, gap="small")
-
-with i1:
-    arrivals = input_card(
-        "Arrivals",
-        int(round(float(row["Arrivals"]))),
-        step=1,
-        fmt="%d"
-    )
-
-with i2:
-    contracts = input_card(
-        "Contracts Processable",
-        int(round(float(row["Contracts Processable"]))),
-        step=1,
-        fmt="%d"
-    )
-
-with i3:
-    closing_rate = input_card(
-        "Closing Rate %",
-        float(row["Closing Rate"]) * 100 if float(row["Closing Rate"]) <= 1 else float(row["Closing Rate"]),
-        step=0.1,
-        fmt="%.1f"
-    )
-
-with i4:
-    avg_price = input_card(
-        "Average Price ($)",
-        int(round(float(row["Average Price"]))),
-        step=100,
-        fmt="%d"
-    )
 
 # =====================================
 # ACTUAL CALCULATIONS
