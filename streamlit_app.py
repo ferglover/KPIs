@@ -345,9 +345,13 @@ def render_matrix(rows):
     </div>
     """
 
+    st.markdown(html_out, unsafe_allow_html=True)
+
 # =====================================
 # ACTUAL INPUTS
 # =====================================
+
+st.markdown("<div class='section-title'>Actuals KPIs</div>", unsafe_allow_html=True)
 
 i1, i2, i3, i4 = st.columns(4, gap="small")
 
