@@ -19,26 +19,6 @@ st.set_page_config(
 # SIMPLE LOGIN
 # =====================================
 
-USERNAME = "admin"
-PASSWORD = "uvc2026"
-
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
-
-if not st.session_state.authenticated:
-    st.title("Login")
-
-    user = st.text_input("User")
-    pwd = st.text_input("Password", type="password")
-
-    if st.button("Login"):
-        if user == USERNAME and pwd == PASSWORD:
-            st.session_state.authenticated = True
-            st.rerun()
-        else:
-            st.error("Invalid credentials")
-
-    st.stop()
 
 # =====================================
 # STYLES
@@ -143,61 +123,12 @@ st.markdown(
 
         .section-title {
             font-size: 18px;
-        }
-    }
+            }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-.matrix-table thead th:first-child,
-.matrix-table tbody td:first-child {
-    position: sticky;
-    left: 0;
-    z-index: 3;
-    background: #0e1117;
-    text-align: left !important;
-}
-
-.matrix-table thead th:first-child {
-    z-index: 4;
-}
-
-.matrix-value.positive {
-    color: #28a745;
-}
-
-.matrix-value.negative {
-    color: #dc3545;
-}
-
-.matrix-value.neutral {
-    color: inherit;
-}
-.matrix-value.positive {
-    color: #28a745;
-}
-
-.matrix-value.negative {
-    color: #dc3545;
-}
-
-.matrix-value.neutral {
-    color: inherit;
-}
-
-.matrix-table thead th:first-child,
-.matrix-table tbody td:first-child {
-    position: sticky;
-    left: 0;
-    z-index: 3;
-    background: #0e1117;
-    text-align: left !important;
-}
-
-.matrix-table thead th:first-child {
-    z-index: 4;
-}
 # =====================================
 # PATH
 # =====================================
