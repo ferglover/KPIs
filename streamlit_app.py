@@ -117,10 +117,9 @@ st.markdown(
 
     .matrix-table {{
         width: 100%;
-        min-width: 720px;
-        table-layout: fixed;
-        border-collapse: separate;
-        border-spacing: 0 5px;
+        min-width: 620px;
+        table-layout: auto;
+        border-collapse: collapse;
     }}
 
     .matrix-table thead th {{
@@ -426,14 +425,12 @@ def render_matrix(rows):
         ==================================================== */
 
         .matrix-table thead th {{
-
             font-size: 13px;
             font-weight: 700;
-
             padding-top: 0px;
-            padding-bottom: 6px;
-            padding-left: 2px;
-            padding-right: 2px;
+            padding-bottom: 4px;
+            padding-left: 0px;
+            padding-right: 0px;
 
             text-align: center;
 
