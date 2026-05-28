@@ -372,7 +372,7 @@ def render_matrix(rows):
         ==================================================== */
 
         .matrix-table col.kpi-col {{
-            width: 115px;
+            width: 90px;
         }}
 
         .matrix-table col.actual-col {{
