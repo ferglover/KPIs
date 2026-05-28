@@ -401,26 +401,25 @@ def render_matrix(rows):
         /* ====================================================
            COLUMN WIDTHS
         ==================================================== */
+                .matrix-table col.kpi-col {{
+            width: 120px;
+        }}
 
-       .matrix-table col.kpi-col {
-    width: 120px;
-}
+        .matrix-table col.actual-col {{
+            width: 85px;
+        }}
 
-.matrix-table col.actual-col {
-    width: 75px;
-}
+        .matrix-table col.projected-col {{
+            width: 95px;
+        }}
 
-.matrix-table col.projected-col {
-    width: 85px;
-}
+        .matrix-table col.forecast-col {{
+            width: 95px;
+        }}
 
-.matrix-table col.forecast-col {
-    width: 85px;
-}
-
-.matrix-table col.variance-col {
-    width: 85px;
-}
+        .matrix-table col.variance-col {{
+            width: 95px;
+        }}
 
         /* ====================================================
            HEADERS
