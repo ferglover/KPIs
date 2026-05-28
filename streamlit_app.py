@@ -152,10 +152,12 @@ st.markdown(
 
     .matrix-value {{
         font-size: 15px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 1.05;
         word-break: break-word;
         color: {COLORS["text"]};
+        padding: 0 2px;
+        text-align: center;
     }}
 
     .matrix-value.positive {{
