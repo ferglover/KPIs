@@ -129,9 +129,9 @@ st.markdown(
         font-weight: 700;
         padding-top: 10px;
         line-height: 1.05;
-        width: 70px;
-        min-width: 70px;
-        max-width: 70px;
+        width: 115px;
+        min-width: 115px;
+        max-width: 115px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -372,7 +372,7 @@ def render_matrix(rows):
         ==================================================== */
 
         .matrix-table col.kpi-col {{
-            width: 150px;
+            width: 115px;
         }}
 
         .matrix-table col.actual-col {{
@@ -448,8 +448,8 @@ def render_matrix(rows):
             color: {COLORS["text"]};
 
             width: auto;
-            min-width: 150px;
-            max-width: none;
+            min-width: 115px;
+            max-width: 115px;
         }}
 
         .matrix-table thead th:first-child {{
