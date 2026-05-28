@@ -18,8 +18,136 @@ st.set_page_config(
 # =====================================
 # SIMPLE LOGIN
 # =====================================
+# =====================================
+# SIMPLE LOGIN
+# =====================================
 
+import uuid
 
+USERS = {
+    "admin": "uvc2026",
+    "erick": "kpi2026",
+}
+
+# =====================================
+# SESSION STATE
+# =====================================
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if "username" not in st.session_state:
+    st.session_state.username = None
+
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
+
+if "active_users" not in st.session_state:
+    st.session_state.active_users = {}
+
+# =====================================
+# LOGIN
+# =====================================
+
+if not st.session_state.authenticated:
+
+    st.title("Login")
+
+    # FORM permite Enter para submit
+    with st.form("login_form"):
+
+        user = st.text_input("User")
+
+        pwd = st.text_input(
+            "Password",
+            type="password"
+        )
+
+        submitted = st.form_submit_button("Login")
+
+    if submitted:
+
+        if user in USERS and pwd == USERS[user]:
+
+            # =====================================
+            # BLOCK MULTI LOGIN
+            # =====================================
+
+            if user in st.session_state.active_users:
+
+                st.error(
+                    "This user is already logged in."
+                )
+
+            else:
+
+                st.session_state.authenticated = True
+
+                st.session_state.username = user
+
+                st.session_state.active_users[user] = (
+                    st.session_state.session_id
+                )
+
+                st.rerun()
+
+        else:
+
+            st.error("Invalid credentials")
+
+    st.stop()
+
+# =====================================
+# VALIDATE ACTIVE SESSION
+# =====================================
+
+if st.session_state.username:
+
+    active_id = st.session_state.active_users.get(
+        st.session_state.username
+    )
+
+    if active_id != st.session_state.session_id:
+
+        st.session_state.authenticated = False
+
+        st.session_state.username = None
+
+        st.error(
+            "Your session was replaced by another login."
+        )
+
+        st.stop()
+
+# =====================================
+# LOGOUT BUTTON
+# =====================================
+
+logout_col1, logout_col2 = st.columns([8,1])
+
+with logout_col2:
+
+    if st.button("Logout"):
+
+        user = st.session_state.username
+
+        if user in st.session_state.active_users:
+
+            del st.session_state.active_users[user]
+
+        st.session_state.authenticated = False
+
+        st.session_state.username = None
+
+        st.rerun()
+
+# =====================================
+# OPTIONAL USER LABEL
+# =====================================
+
+st.caption(
+    f"Logged in as: {st.session_state.username}"
+)
 # =====================================
 # THEME HELPERS
 # =====================================
