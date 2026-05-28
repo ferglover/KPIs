@@ -18,9 +18,6 @@ st.set_page_config(
 # =====================================
 # SIMPLE LOGIN
 # =====================================
-# =====================================
-# SIMPLE LOGIN
-# =====================================
 
 import uuid
 
@@ -140,14 +137,6 @@ with logout_col2:
         st.session_state.username = None
 
         st.rerun()
-
-# =====================================
-# OPTIONAL USER LABEL
-# =====================================
-
-st.caption(
-    f"Logged in as: {st.session_state.username}"
-)
 # =====================================
 # THEME HELPERS
 # =====================================
